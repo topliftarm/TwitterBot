@@ -1,5 +1,6 @@
 import time
 from selenium import webdriver
+from selenium import common
 from selenium.webdriver.common.keys import Keys
 
 class TwitterBot():
@@ -19,11 +20,43 @@ class TwitterBot():
         time.sleep(5)
 
     def TweetSomething(self):
+        #bot.find_element_by_xpath("//a[@data-testid='AccountSwitcher_Logout_Button']").click()
         tweet = self.browser.find_element_by_xpath('''//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div[1]/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div[2]/div/div/div/div''')
-        tweet.send_keys("""Firs Twitter Bot sanane""")
+        tweet.send_keys("""Firs Twitter Bot 1""")
         tweet.send_keys(Keys.COMMAND, Keys.ENTER)
         tweet.find_element_by_xpath("//*[@id='react-root']/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div[2]/div[1]/div/div/div/div[2]/div[4]/div/div/div[2]/div[3]/div/span/span").click()
         time.sleep(5)
+
+
+    def like_tweets(self, cycles=10):
+        bot = self.browser 
+        for i in range(cycles):
+            try:
+                bot.find_element_by_xpath("//div[@data-testid='like']").click()
+            except common.exceptions.NoSuchElementException:
+                time.sleep(3)
+                bot.execute_script('window.scrollTo(0,document.body.scrollHeight/1.5)') 
+                time.sleep(3)
+                bot.find_element_by_xpath("//div[@data-testid='like']").click()
+
+            time.sleep(1)
+            bot.execute_script('window.scrollTo(0,document.body.scrollHeight/1.5)') 
+            time.sleep(5)
+
+    def re_tweets(self, cycles=10):
+        bot = self.browser 
+        for i in range(cycles):
+            try:
+                bot.find_element_by_xpath("//div[@data-testid='retweet']").click()
+            except common.exceptions.NoSuchElementException:
+                time.sleep(3)
+                bot.execute_script('window.scrollTo(0,document.body.scrollHeight/1.5)') 
+                time.sleep(3)
+                bot.find_element_by_xpath("//div[@data-testid='retweet']").click()
+
+            time.sleep(1)
+            bot.execute_script('window.scrollTo(0,document.body.scrollHeight/1.5)') 
+            time.sleep(5)
 
 if __name__=="__main__":
     username= input("Enter your username: ")
@@ -31,3 +64,5 @@ if __name__=="__main__":
     t=TwitterBot(username,password)
     t.signIn()
     t.TweetSomething()
+    t.like_tweets()
+    t.re_tweets()
